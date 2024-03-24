@@ -10,20 +10,23 @@
 #include <pigpio.h>
 
 
-/* GPIO Mapping
+/* GPIO Mapping - Type 3 - Model A+, B+, Pi Zero, Pi Zero W, Pi2B, Pi3B, Pi4B
 
         GPIO#   pin pin     GPIO#
-3V3     -       1   2       -       5V
-SDA 2   -       3   4       -       5V
-SCL 3   -       5   6       -       Ground
-        4       7   8       14      TXD
-Ground  -       9   10      15      RXD
+3V3     -     | 1   2 |     -       5V
+               -------
+SDA     2     | 3   4 |     -       5V
+               ------- 
+SCL     3     | 5   6 |     -       Ground
+               -------
+        4     | 7   8       14      TXD
+Ground  -     | 9   10      15      RXD
 ce1     17      11  12      18      ce0
         27      13  14      -       Ground
         22      15  16      23      
 3V3     -       17  18      24      
 MOSI    10      19  20      -       Ground
-MISO    9       22  25      -       
+MISO    9       21  22      25      
 SCLK    11      23  24      8       CE0
 Ground  -       25  26      7       CE1
 ID_SD   0       27  28      1       ID_SC
