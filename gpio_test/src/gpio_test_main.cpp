@@ -13,12 +13,12 @@
 /* GPIO Mapping
 
         GPIO#   pin pin     GPIO#
-3V3	    -       1   2       -       5V
-SDA	2   -       3   4       -       5V
-SCL	3   -       5   6       -       Ground
+3V3     -       1   2       -       5V
+SDA 2   -       3   4       -       5V
+SCL 3   -       5   6       -       Ground
         4       7   8       14      TXD
 Ground  -       9   10      15      RXD
-ce1	    17      11  12      18      ce0
+ce1     17      11  12      18      ce0
         27      13  14      -       Ground
         22      15  16      23      
 3V3     -       17  18      24      
