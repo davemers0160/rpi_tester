@@ -97,4 +97,5 @@ endif()
 
 message(" ")
 message(STATUS "Build Complete!")
+message(STATUS "cmake --build . --config Release -- -j4")
 message(" ")
