@@ -98,7 +98,7 @@ endif()
 message(" ")
 message(STATUS "Build Complete!")
 message(STATUS "cmake --build . --config Release -- -j4")
-message(STATUS "run the following to remove the sudo requirement:
+message(STATUS "run the following to remove the sudo requirement:")
 message(STATUS "sudo chown root:root gp_run")
 message(STATUS "sudo chmod 4755 my_program")
 message(" ")
