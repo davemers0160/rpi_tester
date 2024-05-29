@@ -19,8 +19,8 @@
 
 cmake_minimum_required(VERSION 3.9)
 
-project(burst_generator_lib VERSION 1.0 DESCRIPTION "Shared library IQ busrt generation code")
-set(LIB_NAME "burst_gen")
+project(test_lib VERSION 1.0 DESCRIPTION "Shared library generation code")
+set(LIB_NAME "test_gen")
 set(default_build_type "Release")
 
 
@@ -40,7 +40,7 @@ string(SUBSTRING ${PROJECT_SOURCE_DIR} 0 ${INDEX} PR_ROOT)
 
 # Custom Build Options
 option(CROSS_COMPILE "Switch that tells CMake that we want to cross compile for an ARM based processor" OFF)
-option(BUILD_ON_PI "Switch that tells CMake to build on a Raspberry PI or Linux based PC" OFF)
+option(BUILD_ON_PI "Switch that tells CMake to cross compile on a Raspberry PI or Linux based PC" OFF)
 
 
 # ----------------------------------------------------------------------------
@@ -104,6 +104,10 @@ else()
         # search headers and libraries in the target environment
         set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
         set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+        
+        set(project_libs ${project_libs}
+            iio
+            )
     endif()
     
 endif()
@@ -119,7 +123,6 @@ set(project_includes
     )
     
 set(project_libs ${project_libs}
-    iio
     )
 
 #------------------------------------------------------------------------------
@@ -152,7 +155,7 @@ message("-----------------------------------------------------------------------
 message(" ")
 
 #------------------------------------------------------------------------------
-message("Building Burst Generation Library...")
+message("Building Library...")
 
 
 if(WIN32)
