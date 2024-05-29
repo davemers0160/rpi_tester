@@ -79,11 +79,7 @@ void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_
 }
 
 
-
-
-
-
-
+/*
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
@@ -182,3 +178,4 @@ int main(int argc, char** argv)
 
 }	// end of main
 
+*/
