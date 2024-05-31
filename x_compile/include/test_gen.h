@@ -125,7 +125,7 @@ public:
     test_generator& operator=(test_generator& tg)
     {
         //return *this = test_generator(tg);
-        return test_generator(tg);
+        return *this;
     }
 
     ////rule_of_five& operator=(rule_of_five&& other) noexcept // move assignment
