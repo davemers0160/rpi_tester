@@ -29,7 +29,7 @@
 inline std::vector<std::complex<float>> generate_oqpsk(std::vector<uint8_t> data, double amplitude, uint32_t sample_rate, float half_symbol_length)
 {
     uint32_t idx = 0, jdx = 0;
-    uint8_t num;
+    //uint8_t num;
 
     uint32_t samples_per_bit = floor(sample_rate * half_symbol_length);
     uint32_t samples_per_symbol = samples_per_bit << 1;
@@ -93,17 +93,53 @@ class test_generator
 //-----------------------------------------------------------------------------
 public:
     
-    test_generator() = default;
+    //test_generator() = default;
+    test_generator(){}
 
-	test_generator(float a, uint32_t fs, float hsl, uint32_t fc, uint32_t num_bits, std::vector<int32_t>& ch) : amplitude(a), sample_rate(fs), half_symbol_length(hsl)
+	test_generator(float a, uint32_t fs, float hsl, uint32_t fc_, uint32_t nb_, std::vector<int32_t>& ch) : amplitude(a), sample_rate(fs), half_symbol_length(hsl), fc(fc_), num_bits(nb_), channels(ch)
 	{
-		data.clear();
+		//data.clear();
         //cpf.resize(n_taps);
 
         //uint32_t num_samples = floor(sample_rate * half_symbol_length);
 
+        //init_generator(channels, fc, num_bits);
+
+	}   // end of test_generator
+    
+    test_generator(const test_generator &tg) : amplitude(tg.amplitude), sample_rate(tg.sample_rate), half_symbol_length(tg.half_symbol_length), fc(tg.fc), num_bits(tg.num_bits), channels(tg.channels)
+    {
+		data.clear();
+
+        init_generator(channels, fc, num_bits);
+
+    }
+
+    ////rule_of_five(rule_of_five&& other) noexcept  : cstring(std::exchange(other.cstring, nullptr)) {}// move constructor
+    //test_generator(test_generator&& tg) noexcept
+    //{
+
+    //}
+
+    ////rule_of_five& operator=(const rule_of_five& other) // copy assignment
+    test_generator& operator=(test_generator& tg)
+    {
+        //return *this = test_generator(tg);
+        return test_generator(tg);
+    }
+
+    ////rule_of_five& operator=(rule_of_five&& other) noexcept // move assignment
+    //test_generator& operator=(test_generator&& tg) noexcept
+    //{
+    //    return *this;
+    //}
+
+
+    //-----------------------------------------------------------------------------
+    void init_generator(std::vector<int32_t>& ch, uint32_t fc, uint32_t num_bits)
+    {
         // configure the hopping channels - if no hopping set to 1 channel
-        configure_hop_channels(ch);
+        //configure_hop_channels(ch);
 
         // create a low pass filter to clean up the RF before rotating
         create_filter(fc);
@@ -116,30 +152,9 @@ public:
         bits_gen = std::uniform_int_distribution<int32_t>(0, 1);
         channel_gen = std::uniform_int_distribution<int32_t>(0, channels.size() - 1);
 
-	}   // end of test_generator
-    
-    test_generator(const test_generator &tg) : amplitude(tg.amplitude), sample_rate(tg.sample_rate), half_symbol_length(tg.half_symbol_length), 
-    {
-		data.clear();
-        //cpf.resize(n_taps);
-
-        //uint32_t num_samples = floor(sample_rate * half_symbol_length);
-
-        // configure the hopping channels - if no hopping set to 1 channel
-        configure_hop_channels(tg.ch);
-
-        // create a low pass filter to clean up the RF before rotating
-        create_filter(tg.fc);
-
-        // pre generate all of the rotation vectord based on the RF channels
-        generate_channel_rot(tg.num_bits);
-
-        // configure the random number generators
-        generator = std::default_random_engine(time(0));
-        bits_gen = std::uniform_int_distribution<int32_t>(0, 1);
-        channel_gen = std::uniform_int_distribution<int32_t>(0, channels.size() - 1);
     }
 
+    //-----------------------------------------------------------------------------
     void configure_generator(float a, uint32_t fs, float hsl, uint32_t fc, std::vector<int32_t>& ch)
     {
 
@@ -151,7 +166,7 @@ public:
         uint32_t idx, jdx;
         std::vector<uint8_t> data(num_bits);
 
-        uint32_t ch, ch_rnd;
+        uint32_t ch_rnd;
 
         std::vector<std::complex<float>> x1;
         std::vector<std::complex<int16_t>> x2;
@@ -191,7 +206,9 @@ public:
     {
         uint32_t idx, jdx;
 
-        double ch;
+        float ch;
+        const float math_2pi = 6.283185307179586476925286766559f;
+        std::complex<float> j = (0, 1);
 
         if (num_bits % 2 == 1)
             ++num_bits;
@@ -208,11 +225,11 @@ public:
         {
             ch_rot[idx].resize(num_samples);
 
-            ch = M_2PI * (channels[idx] / (double)sample_rate);
+            ch = math_2pi * (channels[idx] / (float)sample_rate);
 
             for (jdx = 0; jdx < num_samples; ++jdx)
             {
-                ch_rot[idx][jdx] = std::exp(1i * (ch * jdx));
+                ch_rot[idx][jdx] = std::exp(j * (float)(ch * jdx));
             }
         }
 
@@ -272,7 +289,10 @@ private:
 
     // window/filter size
     const int32_t n_taps = 63;
+    uint32_t fc;
     std::vector<std::complex<float>> cpf;
+
+    uint32_t num_bits;
 
     std::default_random_engine generator;
     std::uniform_int_distribution<int32_t> bits_gen;

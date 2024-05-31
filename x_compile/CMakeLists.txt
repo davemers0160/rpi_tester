@@ -23,7 +23,6 @@ project(test_lib VERSION 1.0 DESCRIPTION "Shared library generation code")
 set(LIB_NAME "test_gen")
 set(default_build_type "Release")
 
-
 set(CMAKE_CXX_STANDARD 11)
 
 set(PLATFORM "$ENV{PLATFORM}" CACHE INTERNAL "Copied from environment variable")
@@ -158,6 +157,8 @@ message(" ")
 message("Building Library...")
 
 
+include_directories(${project_includes})
+
 if(WIN32)
 
     add_definitions(-DDLL_EXPORTS)
@@ -168,7 +169,7 @@ if(WIN32)
 
     if(MSVC AND (${CMAKE_VERSION} VERSION_GREATER "3.6.0"))
         message("MSVC Version: " ${MSVC_VERSION})
-        target_compile_options(${LIB_NAME} PUBLIC "/MP" "/bigobj")
+        target_compile_options(${LIB_NAME} PRIVATE "/MP")
         set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${LIB_NAME})
     endif() 
 

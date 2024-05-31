@@ -26,56 +26,57 @@
 
 // custom includes
 #include <test_gen.h>
+#include <test_gen_lib.h>
 
-#define M_PI 3.14159265358979323846
-#define M_2PI 6.283185307179586476925286766559
+// #define M_PI 3.14159265358979323846
+// #define M_2PI 6.283185307179586476925286766559
 
 //--------------------------------GLOBALS--------------------------------------
-// volatile bool entry = false;
-// volatile bool run = true;
 test_generator tg;
 
 //-----------------------------------------------------------------------------
-template<typename T>
-void save_complex_data(std::string filename, std::vector<std::complex<T>> data)
-{
-    std::ofstream data_file;
+// template<typename T>
+// void save_complex_data(std::string filename, std::vector<std::complex<T>> data)
+// {
+    // std::ofstream data_file;
 
-    //T r, q;
+    // data_file.open(filename, ios::out | ios::binary);
 
-    data_file.open(filename, ios::out | ios::binary);
+    // if (!data_file.is_open())
+    // {
+        // std::cout << "Could not save data. Closing... " << std::endl;
+        // return;
+    // }
 
-    if (!data_file.is_open())
-    {
-        std::cout << "Could not save data. Closing... " << std::endl;
-        //std::cin.ignore();
-        return;
-    }
+    // data_file.write(reinterpret_cast<const char*>(data.data()), 2 * data.size() * sizeof(T));
 
-    data_file.write(reinterpret_cast<const char*>(data.data()), 2 * data.size() * sizeof(T));
-
-    data_file.close();
-}
+    // data_file.close();
+// }
 
 
 //-----------------------------------------------------------------------------
 void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length, uint32_t filter_cutoff, uint32_t num_bits, int32_t *ch, uint32_t num_channels)
 {
     std::vector<int32_t> channels(ch, ch + num_channels);
+
+    //test_generator tmp(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
+    ////tg(tmp);
     tg = test_generator(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
-    
+
+
 }   // end of init_generator
 
 
 //-----------------------------------------------------------------------------
-void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr)
+void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr, uint32_t *data_size)
 {
     
     std::vector<std::complex<int16_t>> iq_data;
     
     tg.generate_random_bursts(num_bursts, num_bits, iq_data);
     
-    std::copy(iq_data.data, iq_data.data + iq_data.size(), iq_ptr);
+    std::copy((int16_t *)iq_data.data(), (int16_t *)iq_data.data() + iq_data.size(), iq_ptr);
+    *data_size = (uint32_t)(iq_data.size() * 2);
 }
 
 

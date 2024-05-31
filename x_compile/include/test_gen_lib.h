@@ -18,24 +18,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    //-----------------------------------------------------------------------------
-    LIB void init_vs_gen_from_file(const char* fn);
 
     //-----------------------------------------------------------------------------
-    LIB void init_vs_generator(unsigned int sig_tbl_num,
-        double* sigma_table_t,
-        unsigned int blur_tbl_num,
-        unsigned char* dm_values_t,
-    );
+    LIB void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length, uint32_t filter_cutoff, uint32_t num_bits, int32_t *ch, uint32_t num_channels);
 
     //-----------------------------------------------------------------------------
-    LIB void set_vs_seed(int seed);
-
-    //-----------------------------------------------------------------------------
-    LIB void get_vs_minmax(unsigned short* min_dm_value, unsigned short* max_dm_value);
-
-    //-----------------------------------------------------------------------------
-    LIB void set_vs_shape_scale(double s);
+    LIB void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr, uint32_t *data_size);
 
 #ifdef __cplusplus
 }
