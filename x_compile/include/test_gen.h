@@ -111,7 +111,7 @@ public:
     {
 		data.clear();
 
-        init_generator(channels, fc, num_bits);
+        //init_generator(channels, fc, num_bits);
 
     }
 
@@ -136,8 +136,16 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    void init_generator(std::vector<int32_t>& ch, uint32_t fc, uint32_t num_bits)
+    void init_generator(float a, uint32_t sr, float hsl, uint32_t fc_, uint32_t nb, std::vector<int32_t>& ch)
     {
+        amplitude = a;
+        sample_rate = sr;
+        half_symbol_length = hsl;
+        fc = fc_;
+        num_bits = nb;
+        
+        std::copy(ch.data(), ch.data()+ch.size(), channels);
+
         // configure the hopping channels - if no hopping set to 1 channel
         //configure_hop_channels(ch);
 
@@ -152,6 +160,15 @@ public:
         bits_gen = std::uniform_int_distribution<int32_t>(0, 1);
         channel_gen = std::uniform_int_distribution<int32_t>(0, channels.size() - 1);
 
+    }
+
+    //-----------------------------------------------------------------------------
+    void set_bits(uint32_t nb)
+    {
+        num_bits = nb;
+
+        // pre generate all of the rotation vectord based on the RF channels
+        generate_channel_rot(num_bits);
     }
 
     //-----------------------------------------------------------------------------
@@ -281,11 +298,11 @@ public:
 
 //-----------------------------------------------------------------------------
 private:
-	//uint8_t burst_type;
-	std::vector<uint8_t> data;
-	float amplitude = 2000;
-	uint32_t sample_rate = 50000000;
-	float half_symbol_length = 0.0000001;
+    //uint8_t burst_type;
+    std::vector<uint8_t> data;
+    float amplitude = 2000; 
+    uint32_t sample_rate = 50000000;
+    float half_symbol_length = 0.0000001;
 
     // window/filter size
     const int32_t n_taps = 63;
