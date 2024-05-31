@@ -144,7 +144,8 @@ public:
         fc = fc_;
         num_bits = nb;
         
-        std::copy(ch.data(), ch.data()+ch.size(), channels);
+        channels.clear();
+        std::copy(ch.begin(), ch.end(), back_inserter(channels));
 
         // configure the hopping channels - if no hopping set to 1 channel
         //configure_hop_channels(ch);
@@ -163,13 +164,13 @@ public:
     }
 
     //-----------------------------------------------------------------------------
-    void set_bits(uint32_t nb)
-    {
-        num_bits = nb;
+    //void set_bits(uint32_t nb)
+    //{
+    //    num_bits = nb;
 
-        // pre generate all of the rotation vectord based on the RF channels
-        generate_channel_rot(num_bits);
-    }
+    //    // pre generate all of the rotation vectord based on the RF channels
+    //    generate_channel_rot(num_bits);
+    //}
 
     //-----------------------------------------------------------------------------
     void configure_generator(float a, uint32_t fs, float hsl, uint32_t fc, std::vector<int32_t>& ch)
