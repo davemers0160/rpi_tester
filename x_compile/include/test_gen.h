@@ -226,7 +226,7 @@ public:
 
         float ch;
         const float math_2pi = 6.283185307179586476925286766559f;
-        std::complex<float> j = (0, 1);
+        std::complex<float> j(0, 1);
 
         if (num_bits % 2 == 1)
             ++num_bits;

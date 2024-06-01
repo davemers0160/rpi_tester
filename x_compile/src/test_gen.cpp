@@ -61,22 +61,33 @@ void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length
 
     //test_generator tmp(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
     ////tg(tmp);
-    tg = test_generator(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
+    //tg = test_generator(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
 
+    tg.init_generator(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
 
 }   // end of init_generator
 
 
 //-----------------------------------------------------------------------------
-void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr, uint32_t *data_size)
+void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t **iq_ptr, uint32_t *data_size)
 {
     
     std::vector<std::complex<int16_t>> iq_data;
     
     tg.generate_random_bursts(num_bursts, num_bits, iq_data);
-    
-    std::copy((int16_t *)iq_data.data(), (int16_t *)iq_data.data() + iq_data.size(), iq_ptr);
+
     *data_size = (uint32_t)(iq_data.size() * 2);
+
+    if (*iq_ptr != NULL)
+    {
+        delete *iq_ptr;
+        *iq_ptr = NULL;
+    }
+
+    *iq_ptr = (int16_t*)malloc(sizeof(**iq_ptr)*(*data_size));
+
+    std::copy((int16_t*)iq_data.data(), (int16_t*)iq_data.data() + *data_size, *iq_ptr);
+    
 }
 
 
