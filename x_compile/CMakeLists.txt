@@ -9,7 +9,7 @@
 # 4. depending on your system (windows/linux) type the following
 # Example CMake build line for windows & VS2015
 # windows: cmake -G "Visual Studio 14 2015 Win64" -DUSE_AVX_INSTRUCTIONS=ON ..
-# linux: cmake -DUSE_AVX_INSTRUCTIONS=ON ..
+# linux: cmake -DCROSS_COMPILE=ON ..
 #
 # 5. To compile:
 # windows: cmake --build . --config Release
@@ -60,6 +60,10 @@ if(WIN32)
 else()
     set(HOME "$ENV{HOME}" CACHE INTERNAL "Copied from environment variable")
 
+    message(" ")
+    message(STATUS "Linux")
+    message(" ")
+    
     # if(${PLATFORM} STREQUAL "HPC")
         # set(COMMON_ROOT "${HOME}/Projects/Common")
     # elseif(${PLATFORM} STREQUAL "MainGear")
@@ -70,6 +74,11 @@ else()
 
     # checking for cross compile.  Only setup for the Linux side
     if(CROSS_COMPILE)
+    
+        message(" ")
+        message(STATUS "Cross Compile option selected")
+        message(" ")
+        
         # the name of the target operating system
         SET(CMAKE_SYSTEM_NAME Linux)
         SET(CMAKE_SYSTEM_VERSION 1)
@@ -86,6 +95,7 @@ else()
             set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc)
             set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-g++)
         else()
+                                        gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf
             set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc)
             set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-g++)
 
