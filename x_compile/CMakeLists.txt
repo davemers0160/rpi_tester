@@ -92,11 +92,11 @@ else()
         # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
         # PC:wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/
         if(BUILD_ON_PI)
-            set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc)
-            set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-g++)
+            set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+            set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
         else()
-            set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc)
-            set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-linux-gnueabihf-g++)
+            set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+            set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
         endif()
 
         # use pluto-0.35
