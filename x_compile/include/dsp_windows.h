@@ -13,6 +13,8 @@
 #include <cmath>
 #include <vector>
 #include <complex>
+#include <iostream>
+#include <iomanip>
 
 namespace DSP
 {
@@ -152,13 +154,13 @@ std::vector<T> create_fir_filter(int32_t N, float fc, funct window_function)
 template <typename funct>
 std::vector<float> create_fir_filter(int64_t N, float fc, std::vector<float> w)
 {
+    std::vector<float> g(N , 0);
+    
     if (w.size() != N )
     {
         std::cout << "Window size is not correct!" << std::endl;
-        return;
+        return g;
     }
-
-    std::vector<float> g(N , 0);
 
     //std::vector<float> w = window_function(N - 1);
 
