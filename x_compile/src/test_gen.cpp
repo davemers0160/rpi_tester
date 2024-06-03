@@ -25,8 +25,8 @@
 #include <random>
 
 // custom includes
-#include <test_gen.h>
-#include <test_gen_lib.h>
+#include "test_gen.h"
+#include "test_gen_lib.h"
 
 // #define M_PI 3.14159265358979323846
 // #define M_2PI 6.283185307179586476925286766559
