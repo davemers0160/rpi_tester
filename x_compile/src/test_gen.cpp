@@ -73,7 +73,7 @@ void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length
 
 
 //-----------------------------------------------------------------------------
-void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t **iq_ptr, uint32_t *data_size)
+void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr, uint32_t *data_size)
 {
     
     std::vector<std::complex<int16_t>> iq_data;
@@ -82,15 +82,15 @@ void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t **iq
 
     *data_size = (uint32_t)(iq_data.size() * 2);
 
-    if (*iq_ptr != NULL)
-    {
-        delete *iq_ptr;
-        *iq_ptr = NULL;
-    }
+    //if (*iq_ptr != NULL)
+    //{
+    //    delete *iq_ptr;
+    //    *iq_ptr = NULL;
+    //}
 
-    *iq_ptr = (int16_t*)malloc(sizeof(**iq_ptr)*(*data_size));
+    //*iq_ptr = (int16_t*)malloc(sizeof(**iq_ptr)*(*data_size));
 
-    std::copy((int16_t*)iq_data.data(), (int16_t*)iq_data.data() + *data_size, *iq_ptr);
+    std::copy((int16_t*)iq_data.data(), (int16_t*)iq_data.data() + *data_size, iq_ptr);
     
 }
 
