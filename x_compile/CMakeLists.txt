@@ -19,6 +19,33 @@
 
 cmake_minimum_required(VERSION 3.9)
 
+# Custom Build Options
+option(CROSS_COMPILE "Switch that tells CMake that we want to cross compile for an ARM based processor" OFF)
+option(BUILD_ON_PI "Switch that tells CMake to cross compile on a Raspberry PI or Linux based PC" OFF)
+
+# checking for cross compile.  Only setup for the Linux side
+if(CROSS_COMPILE)
+    # the name of the target operating system
+    SET(CMAKE_SYSTEM_NAME Linux)
+    SET(CMAKE_SYSTEM_VERSION 1)
+    SET(CMAKE_SYSTEM_PROCESSOR arm)
+
+    set(CMAKE_C_COMPILE_OPTIONS_SYSROOT "--sysroot=") 
+    set(CMAKE_CXX_COMPILE_OPTIONS_SYSROOT "--sysroot=")
+
+    # setting which compilers to use for C and C++ cross compile
+    # use gcc-arm-9.2-2019.12-arch64arm
+    # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
+    # PC:wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/
+    if(BUILD_ON_PI)
+        set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+        set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
+    else()
+        set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+        set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
+    endif()
+endif()
+
 project(test_lib VERSION 1.0 DESCRIPTION "Shared library generation code")
 set(LIB_NAME "test_gen")
 set(default_build_type "Release")
@@ -37,9 +64,6 @@ string(FIND ${PROJECT_SOURCE_DIR} "/" INDEX REVERSE)
 string(SUBSTRING ${PROJECT_SOURCE_DIR} 0 ${INDEX} PR_ROOT)
 
 
-# Custom Build Options
-option(CROSS_COMPILE "Switch that tells CMake that we want to cross compile for an ARM based processor" OFF)
-option(BUILD_ON_PI "Switch that tells CMake to cross compile on a Raspberry PI or Linux based PC" OFF)
 
 
 # ----------------------------------------------------------------------------
@@ -79,25 +103,25 @@ else()
         message(STATUS "Cross Compile option selected")
         message(" ")
         
-        # the name of the target operating system
-        SET(CMAKE_SYSTEM_NAME Linux)
-        SET(CMAKE_SYSTEM_VERSION 1)
-        SET(CMAKE_SYSTEM_PROCESSOR arm)
+        # # the name of the target operating system
+        # SET(CMAKE_SYSTEM_NAME Linux)
+        # SET(CMAKE_SYSTEM_VERSION 1)
+        # SET(CMAKE_SYSTEM_PROCESSOR arm)
 
-        set(CMAKE_C_COMPILE_OPTIONS_SYSROOT "--sysroot=") 
-        set(CMAKE_CXX_COMPILE_OPTIONS_SYSROOT "--sysroot=")
+        # set(CMAKE_C_COMPILE_OPTIONS_SYSROOT "--sysroot=") 
+        # set(CMAKE_CXX_COMPILE_OPTIONS_SYSROOT "--sysroot=")
 
-        # setting which compilers to use for C and C++ cross compile
-        # use gcc-arm-9.2-2019.12-arch64arm
-        # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
-        # PC:wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/
-        if(BUILD_ON_PI)
-            set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
-            set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
-        else()
-            set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
-            set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
-        endif()
+        # # setting which compilers to use for C and C++ cross compile
+        # # use gcc-arm-9.2-2019.12-arch64arm
+        # # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
+        # # PC:wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/
+        # if(BUILD_ON_PI)
+            # set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+            # set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
+        # else()
+            # set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+            # set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
+        # endif()
 
         # use pluto-0.35
         # wget https://github.com/analogdevicesinc/plutosdr-fw/releases/download/v0.35/sysroot-v0.35.tar.gz -P ~/Projects/
