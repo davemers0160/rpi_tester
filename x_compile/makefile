@@ -1,0 +1,1 @@
+/opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc -Wall -Wextra -fPIC ../src/test_gen.cpp -I../include/ -mfloat-abi=hard --sysroot=../../../pluto-0.35.sysroot/ -o libtest_gen.so -shared
