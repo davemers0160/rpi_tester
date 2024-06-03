@@ -60,7 +60,7 @@ project(test_lib VERSION 1.0 DESCRIPTION "Shared library generation code")
 set(LIB_NAME "test_gen")
 set(default_build_type "Release")
 
-set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD 11)
 
 set(PLATFORM "$ENV{PLATFORM}" CACHE INTERNAL "Copied from environment variable")
 if("${PLATFORM}" STREQUAL "")
