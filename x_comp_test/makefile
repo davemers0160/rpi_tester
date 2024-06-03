@@ -3,9 +3,9 @@ CC=gcc
 CFLAGS=-I$(INCLUDE_DIR)
 
 ODIR=obj
-LDIR =../lib
+LDIR =../../x_compile/build
 
-LIBS=-l../../x_compile/build/libtest_gen
+LIBS=-llibtest_gen
 
 _DEPS = test_gen_lib.h
 DEPS = $(patsubst %,$(INCLUDE_DIR)/%,$(_DEPS))
@@ -18,7 +18,7 @@ $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 hellomake: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDIR)/$(LIBS)
 
 .PHONY: clean
 
