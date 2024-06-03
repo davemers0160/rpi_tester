@@ -44,6 +44,16 @@ if(CROSS_COMPILE)
         set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
         set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
     endif()
+    
+    #sudo apt-get install gcc-9-multilib g++-9-multilib
+
+    # adjust the default behavior of the FIND_XXX() commands:
+    # search programs in the host environment
+    set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+
+    # search headers and libraries in the target environment
+    set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+    set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 endif()
 
 project(test_lib VERSION 1.0 DESCRIPTION "Shared library generation code")
@@ -128,13 +138,13 @@ else()
         SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot)
 
 
-        # adjust the default behavior of the FIND_XXX() commands:
-        # search programs in the host environment
-        set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+        # # adjust the default behavior of the FIND_XXX() commands:
+        # # search programs in the host environment
+        # set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 
-        # search headers and libraries in the target environment
-        set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-        set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+        # # search headers and libraries in the target environment
+        # set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+        # set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
         
         set(project_libs ${project_libs}
             iio
