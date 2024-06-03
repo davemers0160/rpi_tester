@@ -135,9 +135,9 @@ else()
 
         # use pluto-0.35
         # wget https://github.com/analogdevicesinc/plutosdr-fw/releases/download/v0.35/sysroot-v0.35.tar.gz -P ~/Projects/
-        SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot)
+        SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot/)
 
-
+        # /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/include/c++/9.2.1/parallel/
         # # adjust the default behavior of the FIND_XXX() commands:
         # # search programs in the host environment
         # set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
@@ -146,9 +146,12 @@ else()
         # set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
         # set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
         
-        set(project_libs ${project_libs}
-            iio
-            )
+        
+        # set(project_libs ${project_libs}
+            # iio
+            # )
+            
+            
     endif()
     
 endif()
@@ -158,7 +161,7 @@ endif()
 file(GLOB SOURCES "src/*.c*"
     )
 
-set(project_includes 
+set(project_includes ${project_includes}
     "include" 
     "${PR_ROOT}/common/include"
     )
