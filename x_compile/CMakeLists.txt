@@ -46,7 +46,7 @@ if(CROSS_COMPILE)
     endif()
     
     #sudo apt-get install gcc-9-multilib g++-9-multilib
-    SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot/)
+    #SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot/)
 
 
     # adjust the default behavior of the FIND_XXX() commands:
@@ -137,7 +137,7 @@ else()
 
         # use pluto-0.35
         # wget https://github.com/analogdevicesinc/plutosdr-fw/releases/download/v0.35/sysroot-v0.35.tar.gz -P ~/Projects/
-        # SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot/)
+        SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot/)
 
         # /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/include/c++/9.2.1/parallel/
         # # adjust the default behavior of the FIND_XXX() commands:
