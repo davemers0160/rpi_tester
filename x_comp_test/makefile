@@ -5,7 +5,7 @@ CFLAGS=-I$(INCLUDE_DIR)
 ODIR=obj
 LDIR =../lib
 
-LIBS=-lm
+LIBS=-l../../x_compile/build/libtest_gen
 
 _DEPS = test_gen_lib.h
 DEPS = $(patsubst %,$(INCLUDE_DIR)/%,$(_DEPS))
