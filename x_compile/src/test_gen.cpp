@@ -23,6 +23,8 @@
 #include <complex>
 #include <mutex>
 #include <random>
+#include <iostream>
+#include <iomanip>
 
 // custom includes
 #include "test_gen.h"
@@ -64,6 +66,8 @@ void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length
     //tg = test_generator(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
 
     tg.init_generator(amplitude, sample_rate, half_bit_length, filter_cutoff, num_bits, channels);
+    
+    std::cout << "Init sucessful!" << std::endl;
 
 }   // end of init_generator
 
