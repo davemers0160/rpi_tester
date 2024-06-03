@@ -56,6 +56,7 @@ if(CROSS_COMPILE)
     # search headers and libraries in the target environment
     set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
     set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+    SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
     
     #SET(CMAKE_SYSROOT ~/Projects/pluto-0.35.sysroot/)
 endif()
