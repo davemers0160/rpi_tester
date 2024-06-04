@@ -24,6 +24,8 @@
 
 #include "dsp_windows.h"
 
+#include "test_gen_lib.h"
+
 
 //-----------------------------------------------------------------------------
 inline std::vector<std::complex<float>> generate_oqpsk(std::vector<uint8_t> data, double amplitude, uint32_t sample_rate, float half_symbol_length)
@@ -93,6 +95,9 @@ class test_generator
 //-----------------------------------------------------------------------------
 public:
     
+    uint32_t sample_rate = 50000000;
+    float half_symbol_length = 0.0000001;
+
     //test_generator() = default;
     test_generator(){}
 
@@ -217,8 +222,54 @@ public:
             IQ.insert(IQ.end(), x2.begin(), x2.end());
 
         }
-    }   // end of generate_burst
+    }   // end of gen_rand_bursts
     
+    //-----------------------------------------------------------------------------
+    void gen_rand_bursts(uint32_t num_bursts, uint32_t num_bits, iq_data_struct *iq, int32_t &data_size)
+    {
+        uint32_t idx, jdx;
+        uint64_t index = 0;
+
+        std::vector<uint8_t> data(num_bits);
+
+        uint32_t ch_rnd;
+
+        std::vector<std::complex<float>> x1;
+        std::vector<std::complex<int16_t>> x2;
+
+        for (jdx = 0; jdx < num_bursts; ++jdx)
+        {
+
+            ch_rnd = channel_gen(generator);
+            //ch = channels[ch_rnd];
+
+            // create the random bit sequence
+            for (idx = 0; idx < num_bits; ++idx)
+                data[idx] = bits_gen(generator);
+
+            // generate the IQ data
+            std::vector<std::complex<float>> iq_data = generate_oqpsk(data, amplitude, sample_rate, half_symbol_length);
+
+            // filter the IQ samples
+            //apply_filter(iq_data, x1);
+
+            // rotate the samples
+            //apply_rotation(x1, ch_rot[ch_rnd], x2);
+            //apply_rotation(iq_data, ch_rot[ch_rnd], x2);
+
+            apply_filter_rotation(iq_data, ch_rot[ch_rnd], x2);
+
+            // append the samples
+            for (idx = 0; idx < x2.size(); ++idx)
+            {
+                iq[index].r = x2[idx].real();
+                iq[index++].i = x2[idx].imag();
+            }
+
+        }
+        data_size = index;
+    }   // end of gen_rand_bursts
+
     //-----------------------------------------------------------------------------
     void generate_channel_rot(uint32_t num_bits)
     {
@@ -302,8 +353,6 @@ private:
     //uint8_t burst_type;
     std::vector<uint8_t> data;
     float amplitude = 2000; 
-    uint32_t sample_rate = 50000000;
-    float half_symbol_length = 0.0000001;
 
     // window/filter size
     const int32_t n_taps = 63;

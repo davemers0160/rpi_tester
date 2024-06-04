@@ -57,7 +57,7 @@ test_generator tg;
 
 
 //-----------------------------------------------------------------------------
-void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length, uint32_t filter_cutoff, uint32_t num_bits, int32_t *ch, uint32_t num_channels)
+void init_generator(float amplitude, unsigned int sample_rate, float half_bit_length, unsigned int filter_cutoff, unsigned int num_bits, int *ch, unsigned int num_channels)
 {
     std::vector<int32_t> channels(ch, ch + num_channels);
 
@@ -71,29 +71,54 @@ void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length
 
 }   // end of init_generator
 
-
 //-----------------------------------------------------------------------------
-void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr, uint32_t *data_size)
+void generate_random_bursts(unsigned int num_bursts, unsigned int num_bits, short *iq_ptr, int*data_size)
 {
     
     std::vector<std::complex<int16_t>> iq_data;
     
     tg.gen_rand_bursts(num_bursts, num_bits, iq_data);
 
-    *data_size = (uint32_t)(iq_data.size() * 2);
-
-    //if (*iq_ptr != NULL)
-    //{
-    //    delete *iq_ptr;
-    //    *iq_ptr = NULL;
-    //}
-
-    //*iq_ptr = (int16_t*)malloc(sizeof(**iq_ptr)*(*data_size));
+    *data_size = (int32_t)(iq_data.size() * 2);
 
     std::copy((int16_t*)iq_data.data(), (int16_t*)iq_data.data() + *data_size, iq_ptr);
     
-}
+}   // end of generate_random_bursts
 
+//-----------------------------------------------------------------------------
+void generate_random_bursts_st(unsigned int num_bursts, unsigned int num_bits, iq_data_struct *iq_ptr, int* data_size)
+{
+
+    std::vector<std::complex<int16_t>> iq_data;
+
+    tg.gen_rand_bursts(num_bursts, num_bits, iq_ptr, *data_size);
+
+    //*data_size = (int32_t)(iq_data.size() * 2);
+
+    //std::copy((int16_t*)iq_data.data(), (int16_t*)iq_data.data() + *data_size, iq_ptr);
+
+}   // end of generate_random_bursts
+
+//-----------------------------------------------------------------------------
+int calcuate_num_samples(unsigned int num_bursts, unsigned int num_bits)
+{
+    int data_size = 0;
+
+    // calculate bits per symbol
+    uint32_t samples_per_bit = floor(tg.sample_rate * tg.half_symbol_length);
+    uint32_t samples_per_symbol = samples_per_bit << 1;
+
+    // check for odd numberand append a 0 at the end if it is odd
+    if (num_bits % 2 == 1)
+        ++num_bits;
+
+    uint32_t num_bit_pairs = num_bits >> 1;
+
+    data_size = (num_bit_pairs * samples_per_symbol) + samples_per_bit;
+
+    return data_size;
+
+}   // end of calcuate_num_samples
 
 /*
 //-----------------------------------------------------------------------------
