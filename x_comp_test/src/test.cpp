@@ -41,10 +41,10 @@ typedef void* HINSTANCE;
 int main(int argc, char** argv)
 {
     
-    typedef std::chrono::nanoseconds ns;
+    typedef std::chrono::microseconds us;
     auto start_time = std::chrono::high_resolution_clock::now();
     auto stop_time = std::chrono::high_resolution_clock::now();
-    auto elapsed_time = std::chrono::duration_cast<ns>(stop_time - start_time);
+    auto elapsed_time = std::chrono::duration_cast<us>(stop_time - start_time);
 
     //----------------------------------------------------------------------------------------
     // variables    
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     start_time = std::chrono::high_resolution_clock::now();
     generate_random_bursts_st(num_bursts, num_bits, iq_data, &data_size);
     stop_time = std::chrono::high_resolution_clock::now();
-    elapsed_time = std::chrono::duration_cast<ns>(stop_time - start_time);
+    elapsed_time = std::chrono::duration_cast<us>(stop_time - start_time);
 
     for(idx=0; idx<data_size; ++idx)
     {
@@ -81,8 +81,9 @@ int main(int argc, char** argv)
         std::cout << "Sample: " << iq_data[idx].r << "\t" << iq_data[idx].i << std::endl;
     }
 
-    std::cout << std::endl << "time (us): " << elapsed_time.count() / 1000.0 << std::endl;
+    std::cout << std::endl << "time (us): " << elapsed_time.count() << std::endl;
 
+    std::cin.ignore();
 	return 0;
 
 }	// end of main

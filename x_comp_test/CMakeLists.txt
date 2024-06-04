@@ -56,6 +56,7 @@ endif()
 #------------------------------------------------------------------------------
 PROJECT(burst_test_project)
 set(exe_name "burst_test")
+set(default_build_type "Release")
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -113,6 +114,8 @@ else()
         SET(CMAKE_SYSROOT ${HOME}/Projects/pluto-0.35.sysroot/)
             
     endif()
+    
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
     
 endif()
 
