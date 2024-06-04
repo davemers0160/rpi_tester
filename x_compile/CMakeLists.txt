@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-#  Root CMake file for the bladeRF recieve example
+#  Root CMake file
 # ----------------------------------------------------------------------------
 #
 # To perform an out of source build do the following on the command line:
@@ -8,7 +8,7 @@
 # 3. cd build
 # 4. depending on your system (windows/linux) type the following
 # Example CMake build line for windows & VS2015
-# windows: cmake -G "Visual Studio 14 2015 Win64" -DUSE_AVX_INSTRUCTIONS=ON ..
+# windows: cmake -G "Visual Studio 14 2015 Win64" ..
 # linux: cmake -DCROSS_COMPILE=ON ..
 #
 # 5. To compile:
@@ -36,7 +36,7 @@ if(CROSS_COMPILE)
     # setting which compilers to use for C and C++ cross compile
     # use gcc-arm-9.2-2019.12-arch64arm
     # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
-    # PC:wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/
+    # PC: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/ 
     if(BUILD_ON_PI)
         set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
         set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
@@ -45,10 +45,6 @@ if(CROSS_COMPILE)
         set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
     endif()
     
-    #sudo apt-get install gcc-9-multilib g++-9-multilib
-    #SET(CMAKE_SYSROOT /home/{$HOME}/Projects/pluto-0.35.sysroot/)
-
-
     # adjust the default behavior of the FIND_XXX() commands:
     # search programs in the host environment
     set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
@@ -58,14 +54,13 @@ if(CROSS_COMPILE)
     set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
     SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
     
-    #SET(CMAKE_SYSROOT ~/Projects/pluto-0.35.sysroot/)
 endif()
 
 project(test_lib VERSION 1.0 DESCRIPTION "Shared library generation code")
 set(LIB_NAME "test_gen")
 set(default_build_type "Release")
 
-#set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 
 set(PLATFORM "$ENV{PLATFORM}" CACHE INTERNAL "Copied from environment variable")
 if("${PLATFORM}" STREQUAL "")
@@ -79,22 +74,11 @@ string(FIND ${PROJECT_SOURCE_DIR} "/" INDEX REVERSE)
 string(SUBSTRING ${PROJECT_SOURCE_DIR} 0 ${INDEX} PR_ROOT)
 
 
-
-
 # ----------------------------------------------------------------------------
 if(WIN32)
     message(" ")
     message(STATUS "Windows")
     message(" ")
-    # if(${PLATFORM} STREQUAL "Laptop")
-        # set(COMMON_ROOT "D:/Common")
-    # elseif(${PLATFORM} STREQUAL "LaptopN")
-        # set(COMMON_ROOT "C:/Projects/Common")
-    # elseif(${PLATFORM} STREQUAL "Laptop_Beast")
-        # set(COMMON_ROOT "C:/Projects/Common")
-    # else()
-        # set(COMMON_ROOT "C:/Projects/Common")
-    # endif()
 
 else()
     set(HOME "$ENV{HOME}" CACHE INTERNAL "Copied from environment variable")
@@ -102,14 +86,6 @@ else()
     message(" ")
     message(STATUS "Linux")
     message(" ")
-    
-    # if(${PLATFORM} STREQUAL "HPC")
-        # set(COMMON_ROOT "${HOME}/Projects/Common")
-    # elseif(${PLATFORM} STREQUAL "MainGear")
-        # set(COMMON_ROOT "${HOME}/Projects/Common")
-    # else()
-        # set(COMMON_ROOT "${HOME}/Projects/Common")
-    # endif()
 
     # checking for cross compile.  Only setup for the Linux side
     if(CROSS_COMPILE)
@@ -117,45 +93,10 @@ else()
         message(" ")
         message(STATUS "Cross Compile option selected")
         message(" ")
-        
-        # # the name of the target operating system
-        # SET(CMAKE_SYSTEM_NAME Linux)
-        # SET(CMAKE_SYSTEM_VERSION 1)
-        # SET(CMAKE_SYSTEM_PROCESSOR arm)
-
-        # set(CMAKE_C_COMPILE_OPTIONS_SYSROOT "--sysroot=") 
-        # set(CMAKE_CXX_COMPILE_OPTIONS_SYSROOT "--sysroot=")
-
-        # # setting which compilers to use for C and C++ cross compile
-        # # use gcc-arm-9.2-2019.12-arch64arm
-        # # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
-        # # PC:wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/
-        # if(BUILD_ON_PI)
-            # set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
-            # set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
-        # else()
-            # set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
-            # set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++)
-        # endif()
 
         # use pluto-0.35
         # wget https://github.com/analogdevicesinc/plutosdr-fw/releases/download/v0.35/sysroot-v0.35.tar.gz -P ~/Projects/
-        SET(CMAKE_SYSROOT ~/Projects/pluto-0.35.sysroot/)
-
-        # /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/include/c++/9.2.1/parallel/
-        # # adjust the default behavior of the FIND_XXX() commands:
-        # # search programs in the host environment
-        # set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-
-        # # search headers and libraries in the target environment
-        # set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-        # set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-        
-        
-        # set(project_libs ${project_libs}
-            # iio
-            # )
-            
+        SET(CMAKE_SYSROOT ${HOME}/Projects/pluto-0.35.sysroot/)
             
     endif()
     
