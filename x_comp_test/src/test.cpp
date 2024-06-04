@@ -13,9 +13,9 @@ typedef void* HINSTANCE;
 
 // C/C++ includes
 //#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-// #include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 // #include <fstream>
 // #include <iomanip>
 // #include <chrono>
@@ -61,11 +61,13 @@ int main(int argc, char** argv)
 
     generate_random_bursts(num_bursts, num_bits, iq_data, &data_size);
     
-    printf("number of samples generated: %d\r\n", data_size);
+    //printf("number of samples generated: %d\r\n", data_size);
+    std::cout << "number of samples generated: " << data_size << std::endl;
     
     for(idx=0; idx<data_size; idx=idx+2)
     {
-        printf("Sample: %d \t %di\r\n", iq_data[idx], iq_data[idx+1]);
+        //printf("Sample: %d \t %di\r\n", iq_data[idx], iq_data[idx+1]);
+        std::cout << "Sample: " << iq_data[idx] << "\t" << iq_data[idx+1] << std::endl;
     }
 
 	return 0;
