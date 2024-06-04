@@ -57,6 +57,8 @@ endif()
 PROJECT(burst_test_project)
 set(exe_name "burst_test")
 
+set(CMAKE_CXX_STANDARD 11)
+
 set(PLATFORM "$ENV{PLATFORM}" CACHE INTERNAL "Copied from environment variable")
 if("${PLATFORM}" STREQUAL "")
     set(PLATFORM "NOT_SET")
