@@ -87,6 +87,9 @@ if(WIN32)
     set(TEST_GEN_LIBS "${PR_ROOT}/x_compile/build/Debug/test_gen.lib")
 
 else()
+
+    set(HOME "$ENV{HOME}" CACHE INTERNAL "Copied from environment variable")
+
     if(${PLATFORM} STREQUAL "HPC")
         set(COMMON_ROOT "~/Projects/Common")
     elseif(${PLATFORM} STREQUAL "MainGear")
