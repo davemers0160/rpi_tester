@@ -55,11 +55,11 @@ int main(int argc, char** argv)
     
     int channels[1] = {0};
     
-    short iq_data[5000] = {0};
+    short iq_data[6000] = {0};
 
     init_generator(amplitude, sample_rate, half_bit_length, fc, num_bits, channels, 1);
 
-    generate_random_bursts(num_bursts, num_bits, &iq_data, &data_size);
+    generate_random_bursts(num_bursts, num_bits, iq_data, &data_size);
     
     printf("number of samples generated: %d", data_size);
     

@@ -23,7 +23,7 @@ extern "C" {
     LIB void init_generator(float amplitude, uint32_t sample_rate, float half_bit_length, uint32_t filter_cutoff, uint32_t num_bits, int32_t *ch, uint32_t num_channels);
 
     //-----------------------------------------------------------------------------
-    LIB void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t **iq_ptr, uint32_t *data_size);
+    LIB void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_ptr, uint32_t *data_size);
 
 #ifdef __cplusplus
 }
