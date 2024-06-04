@@ -179,7 +179,7 @@ public:
     }   // end of configure_generator
 
 	//-----------------------------------------------------------------------------
-    void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, std::vector<std::complex<int16_t>> &IQ)
+    void gen_rand_bursts(uint32_t num_bursts, uint32_t num_bits, std::vector<std::complex<int16_t>> &IQ)
     {
         uint32_t idx, jdx;
         std::vector<uint8_t> data(num_bits);

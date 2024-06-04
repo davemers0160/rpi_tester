@@ -78,7 +78,7 @@ void generate_random_bursts(uint32_t num_bursts, uint32_t num_bits, int16_t *iq_
     
     std::vector<std::complex<int16_t>> iq_data;
     
-    tg.generate_random_bursts(num_bursts, num_bits, iq_data);
+    tg.gen_rand_bursts(num_bursts, num_bits, iq_data);
 
     *data_size = (uint32_t)(iq_data.size() * 2);
 
