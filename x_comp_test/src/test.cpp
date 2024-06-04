@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
     generate_random_bursts(num_bursts, num_bits, iq_data, &data_size);
     
-    printf("number of samples generated: %d", data_size);
+    printf("number of samples generated: %d\r\n", data_size);
     
     for(idx=0; idx<data_size; idx=idx+2)
     {
