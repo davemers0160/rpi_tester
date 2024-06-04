@@ -1,4 +1,5 @@
-# gcc src/test.cpp -Wall -L../../x_compile/build -llibtest_gen -I../../x_compile/include -o test
+# gcc src/test.cpp -Wall -I../../x_compile/include -o test -L../../x_compile/build -ltest_gen
+
 INCLUDE_DIR =../../x_compile/include
 CC=gcc
 CFLAGS=-I$(INCLUDE_DIR)
