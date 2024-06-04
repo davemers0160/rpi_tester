@@ -12,9 +12,49 @@
 # linux: cmake --build . --config Release -- -j10
 #
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.9)
 
-PROJECT(test_run)
+#------------------------------------------------------------------------------
+# Custom Build Options
+option(CROSS_COMPILE "Switch that tells CMake that we want to cross compile for an ARM based processor" OFF)
+option(BUILD_ON_PI "Switch that tells CMake to cross compile on a Raspberry PI or Linux based PC" OFF)
+
+#------------------------------------------------------------------------------
+# checking for cross compile.  Only setup for the Linux side
+if(CROSS_COMPILE)
+    # the name of the target operating system
+    SET(CMAKE_SYSTEM_NAME Linux)
+    SET(CMAKE_SYSTEM_VERSION 1)
+    SET(CMAKE_SYSTEM_PROCESSOR arm)
+
+    set(CMAKE_C_COMPILE_OPTIONS_SYSROOT "--sysroot=") 
+    set(CMAKE_CXX_COMPILE_OPTIONS_SYSROOT "--sysroot=")
+
+    # setting which compilers to use for C and C++ cross compile
+    # use gcc-arm-9.2-2019.12-arch64arm
+    # RPI: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf.tar.xz -P /opt/
+    # PC: wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz -P /opt/ 
+    if(BUILD_ON_PI)
+        set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+        set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-aarch64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+    else()
+        set(CMAKE_C_COMPILER   /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+        set(CMAKE_CXX_COMPILER /opt/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc)
+    endif()
+    
+    # adjust the default behavior of the FIND_XXX() commands:
+    # search programs in the host environment
+    set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+
+    # search headers and libraries in the target environment
+    set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+    set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+    SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+    
+endif()
+
+#------------------------------------------------------------------------------
+PROJECT(burst_test_project)
 set(exe_name "burst_test")
 
 set(PLATFORM "$ENV{PLATFORM}" CACHE INTERNAL "Copied from environment variable")
@@ -29,6 +69,7 @@ message("Platform: " ${PLATFORM})
 string(FIND ${PROJECT_SOURCE_DIR} "/" INDEX REVERSE)
 string(SUBSTRING ${PROJECT_SOURCE_DIR} 0 ${INDEX} PR_ROOT)
 
+#------------------------------------------------------------------------------
 if(WIN32)
     if(${PLATFORM} STREQUAL "Laptop")
         set(COMMON_ROOT "D:/Common")
@@ -55,6 +96,19 @@ else()
     set(TEST_GEN_DIRS "${PR_ROOT}/x_compile/include")
     set(TEST_GEN_LIBS "${PR_ROOT}/x_compile/build/libtest_gen.so")
     
+    # checking for cross compile.  Only setup for the Linux side
+    if(CROSS_COMPILE)
+    
+        message(" ")
+        message(STATUS "Cross Compile option selected")
+        message(" ")
+
+        # use pluto-0.35
+        # wget https://github.com/analogdevicesinc/plutosdr-fw/releases/download/v0.35/sysroot-v0.35.tar.gz -P ~/Projects/
+        SET(CMAKE_SYSROOT ${HOME}/Projects/pluto-0.35.sysroot/)
+            
+    endif()
+    
 endif()
 
 
@@ -71,6 +125,7 @@ set(project_libs ${project_libs}
     "${TEST_GEN_LIBS}"
     )
 
+#------------------------------------------------------------------------------
 message(" ")
 message("--------------------------------------------------------")
 message("Source Files: ")
@@ -119,8 +174,9 @@ else()
     #target_link_libraries(${exe_name} ${OpenCV_LIBS} ${OBJ_DET_LIBS})
 endif()
 
+# ----------------------------------------------------------------------------
 message(" ")
-message("Build Complete!")
+message(STATUS "Build Complete!")
 message(STATUS "cmake --build . --config Release -- -j4")
 message(" ")
 

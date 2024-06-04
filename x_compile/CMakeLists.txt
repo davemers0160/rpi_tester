@@ -16,13 +16,14 @@
 # linux: cmake --build . --config Release -- -j4
 #
 
-
 cmake_minimum_required(VERSION 3.9)
 
+#------------------------------------------------------------------------------
 # Custom Build Options
 option(CROSS_COMPILE "Switch that tells CMake that we want to cross compile for an ARM based processor" OFF)
 option(BUILD_ON_PI "Switch that tells CMake to cross compile on a Raspberry PI or Linux based PC" OFF)
 
+#------------------------------------------------------------------------------
 # checking for cross compile.  Only setup for the Linux side
 if(CROSS_COMPILE)
     # the name of the target operating system
@@ -72,7 +73,6 @@ message("Platform: " ${PLATFORM})
 # find the root of the main project
 string(FIND ${PROJECT_SOURCE_DIR} "/" INDEX REVERSE)
 string(SUBSTRING ${PROJECT_SOURCE_DIR} 0 ${INDEX} PR_ROOT)
-
 
 # ----------------------------------------------------------------------------
 if(WIN32)
