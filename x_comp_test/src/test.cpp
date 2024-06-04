@@ -6,7 +6,7 @@
 
 #else
     
-#include <dlfcn.h>
+//#include <dlfcn.h>
 typedef void* HINSTANCE;
 
 #endif
