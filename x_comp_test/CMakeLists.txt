@@ -115,7 +115,7 @@ else()
             
     endif()
     
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+    set(CMAKE_CXX_FLAGS "-O3")
     
 endif()
 
