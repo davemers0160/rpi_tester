@@ -33,6 +33,10 @@ typedef void* HINSTANCE;
 #include "test_gen_lib.h"
 
 
+typedef struct {
+    short r;
+    short i;
+} iq_test_struct;
 
 // -------------------------------GLOBALS--------------------------------------
 
@@ -60,7 +64,7 @@ int main(int argc, char** argv)
     
     int channels[1] = {0};
     
-    iq_data_struct iq_data[6000] = {0};
+    iq_test_struct iq_data[6000] = {0};
 
     // run the lib initialization routine
     init_generator(amplitude, sample_rate, half_bit_length, fc, num_bits, channels, 1);
@@ -83,7 +87,7 @@ int main(int argc, char** argv)
 
     std::cout << std::endl << "time (us): " << elapsed_time.count() << std::endl;
 
-    std::cin.ignore();
+    //std::cin.ignore();
 	return 0;
 
 }	// end of main

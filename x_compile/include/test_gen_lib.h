@@ -30,7 +30,7 @@ extern "C" {
 
     //-----------------------------------------------------------------------------
     LIB void generate_random_bursts(unsigned int num_bursts, unsigned int num_bits, short* iq_ptr, int* data_size);
-    LIB void generate_random_bursts_st(unsigned int num_bursts, unsigned int num_bits, iq_data_struct* iq_ptr, int* data_size);
+    LIB void generate_random_bursts_st(unsigned int num_bursts, unsigned int num_bits, void* iq_ptr, int* data_size);
 
     //-----------------------------------------------------------------------------
     LIB int calcuate_num_samples(unsigned int num_bursts, unsigned int num_bits);

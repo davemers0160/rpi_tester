@@ -86,12 +86,13 @@ void generate_random_bursts(unsigned int num_bursts, unsigned int num_bits, shor
 }   // end of generate_random_bursts
 
 //-----------------------------------------------------------------------------
-void generate_random_bursts_st(unsigned int num_bursts, unsigned int num_bits, iq_data_struct *iq_ptr, int* data_size)
+void generate_random_bursts_st(unsigned int num_bursts, unsigned int num_bits, void *iq_ptr, int* data_size)
 {
 
     std::vector<std::complex<int16_t>> iq_data;
+    iq_data_struct *p = (static_cast<iq_data_struct*>(iq_ptr));
 
-    tg.gen_rand_bursts(num_bursts, num_bits, iq_ptr, *data_size);
+    tg.gen_rand_bursts(num_bursts, num_bits, p, *data_size);
 
     //*data_size = (int32_t)(iq_data.size() * 2);
 
