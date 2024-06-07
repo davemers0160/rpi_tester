@@ -117,7 +117,7 @@ int calcuate_num_samples(unsigned int num_bursts, unsigned int num_bits)
 
     data_size = (num_bit_pairs * samples_per_symbol) + samples_per_bit;
 
-    return data_size;
+    return (data_size * num_bursts);
 
 }   // end of calcuate_num_samples
 

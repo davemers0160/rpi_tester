@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     float half_bit_length = 0.00000025f;
 
     unsigned int num_bits = 208;
-    unsigned int num_bursts = 1;
+    unsigned int num_bursts = 16;
     int data_size = 0;
     
     int channels[1] = {0};
