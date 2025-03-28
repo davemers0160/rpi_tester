@@ -15,6 +15,16 @@
 // Use following commands to install prerequisites and build
 // sudo apt install gpiod
 // sudo apt install libgpiod-dev
+//
+// sudo apt-get install autoconf-archive libtool pkg-config autotools-dev
+//
+// git clone -b v2.2.x https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
+// cd libgpiod
+// ./autogen.sh --enable-tools --prefix=/opt
+// make
+// sudo make install
+
+
 
 /* GPIO Mapping - Type 3 - Model A+, B+, Pi Zero, Pi Zero W, Pi2B, Pi3B, Pi4B, P5 (gpiochip4)
 
