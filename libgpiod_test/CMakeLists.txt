@@ -50,6 +50,7 @@ set(project_includes
     )
     
 set(project_libs ${project_libs}
+    gpiodcxx
     #pigpio
     #rt
     #pthread
