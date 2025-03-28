@@ -12,6 +12,9 @@
 // RPI gpio include - libgpiod c++ bindings
 #include <gpiod.hpp>
 
+// Use following commands to install prerequisites and build
+// sudo apt install gpiod
+// sudo apt install libgpiod-dev
 
 /* GPIO Mapping - Type 3 - Model A+, B+, Pi Zero, Pi Zero W, Pi2B, Pi3B, Pi4B, P5 (gpiochip4)
 
@@ -59,6 +62,14 @@ Ground  -     | 39  40 |    21      sclk
 
 */
 
+namespace {
+
+/* Example configuration - customize to suit your situation */
+const ::std::filesystem::path chip_path("/dev/gpiochip0");
+const ::gpiod::line::offsets led_gpio = 2;
+
+} /* namespace */
+
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
@@ -67,9 +78,8 @@ int main(int argc, char** argv)
     
     //int32_t led_gpio = 2;
     
-    const ::std::filesystem::path chip_path("/dev/gpiochip4");
-    const ::gpiod::line::offset led_gpio = 2;
-
+    //const ::std::filesystem::path chip_path("/dev/gpiochip4");
+    //const ::gpiod::line::offset led_gpio = 2;
     
     // initialize
 	auto gpio_request =
