@@ -84,9 +84,15 @@ int main(int argc, char** argv)
     const ::gpiod::line::offset led_gpio = 16;
     
     // initialize
-	auto gpio_request =
-		::gpiod::chip(chip_path)
-			.prepare_request()
+	// auto gpio_request =
+		// ::gpiod::chip(chip_path)
+			// .prepare_request()
+			// .set_consumer("toggle-line-value")
+			// .add_line_settings(led_gpio, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
+			// .do_request();
+            
+    gpiod::chip gpio_chip = ::gpiod::chip(chip_path);
+    gpiod::request_builder gpio_request = gpio_chip.prepare_request()
 			.set_consumer("toggle-line-value")
 			.add_line_settings(led_gpio, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
 			.do_request();
@@ -108,7 +114,7 @@ int main(int argc, char** argv)
     }
     
     // close the gpio line
-    gpio_request.close();
+    gpio_chip.close();
     
     std::cout << "complete!" << std::endl;
     
