@@ -13,17 +13,14 @@
 #include <gpiod.hpp>
 
 // Use following commands to install prerequisites and build
-// sudo apt install gpiod
-// sudo apt install libgpiod-dev
 //
 // sudo apt-get install autoconf-archive libtool pkg-config autotools-dev
 //
 // git clone -b v2.2.x https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
 // cd libgpiod
-// ./autogen.sh --enable-tools --prefix=/opt
+// ./autogen.sh --enable-tools --enable-bindings-cxx --prefix=/opt
 // make
 // sudo make install
-
 
 
 /* GPIO Mapping - Type 3 - Model A+, B+, Pi Zero, Pi Zero W, Pi2B, Pi3B, Pi4B, P5 (gpiochip4)
@@ -72,13 +69,8 @@ Ground  -     | 39  40 |    21      sclk
 
 */
 
-namespace {
-
 /* Example configuration - customize to suit your situation */
-const ::std::filesystem::path chip_path("/dev/gpiochip0");
-const ::gpiod::line::offsets led_gpio = 2;
 
-} /* namespace */
 
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv)
@@ -88,15 +80,15 @@ int main(int argc, char** argv)
     
     //int32_t led_gpio = 2;
     
-    //const ::std::filesystem::path chip_path("/dev/gpiochip4");
-    //const ::gpiod::line::offset led_gpio = 2;
+    const std::filesystem::path chip_path("/dev/gpiochip0");
+    const ::gpiod::line::offset led_gpio = 16;
     
     // initialize
 	auto gpio_request =
 		::gpiod::chip(chip_path)
 			.prepare_request()
 			.set_consumer("toggle-line-value")
-			.add_line_settings(line_offset, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
+			.add_line_settings(led_gpio, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
 			.do_request();
     
     
@@ -109,16 +101,17 @@ int main(int argc, char** argv)
         
         gpio_request.set_value(led_gpio, gpio_value);   
                     
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
         
-        gpio_value = ::gpiod::line::value::ACTIVE) ? ::gpiod::line::value::INACTIVE : ::gpiod::line::value::ACTIVE;
+        gpio_value = (gpio_value == ::gpiod::line::value::ACTIVE) ? ::gpiod::line::value::INACTIVE : ::gpiod::line::value::ACTIVE;
     
     }
     
+    // close the gpio line
+    gpio_request.close();
+    
     std::cout << "complete!" << std::endl;
     
-    gpioTerminate();
-
     return 0;
 
 }   // end of main

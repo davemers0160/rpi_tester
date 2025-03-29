@@ -38,6 +38,10 @@ string(SUBSTRING ${PROJECT_SOURCE_DIR} 0 ${INDEX} PR_ROOT)
 
 include("${PR_ROOT}/common/platform_paths.cmake")
 
+# get the libgpiod paths
+set(LIBGPIO_DIR "/opt/lib/libgpiodcxx.so")
+set(LIBGPIO_INCLUDE "/opt/include")
+
 # look for any *.c and *.cpp files
 file(GLOB SOURCES "src/*.c*"
     "${COMMON_ROOT}/src/*.cpp"
@@ -47,13 +51,11 @@ set(project_includes
     "include" 
     "${PR_ROOT}/common/include"
     "${COMMON_ROOT}/include"
+    ${LIBGPIO_INCLUDE}
     )
     
 set(project_libs ${project_libs}
-    gpiodcxx
-    #pigpio
-    #rt
-    #pthread
+    ${LIBGPIO_DIR}
     )
 
 message(" ")
