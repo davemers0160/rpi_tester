@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 			// .do_request();
             
     gpiod::chip gpio_chip = ::gpiod::chip(chip_path);
-    gpiod::request_builder gpio_request = gpio_chip.prepare_request()
+    gpiod::line_request gpio_request = gpio_chip.prepare_request()
 			.set_consumer("toggle-line-value")
 			.add_line_settings(led_gpio, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
 			.do_request();
