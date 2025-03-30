@@ -82,7 +82,8 @@ int main(int argc, char** argv)
     
     const std::filesystem::path chip_path("/dev/gpiochip0");
     const ::gpiod::line::offset led_gpio = 16;
-    
+    gpiod::line::value gpio_value = gpiod::line::value::ACTIVE;
+
     // initialize
 	// auto gpio_request =
 		// ::gpiod::chip(chip_path)
@@ -92,28 +93,34 @@ int main(int argc, char** argv)
 			// .do_request();
             
     gpiod::chip gpio_chip = ::gpiod::chip(chip_path);
-    gpiod::line_request gpio_request = gpio_chip.prepare_request()
-			.set_consumer("toggle-line-value")
-			.add_line_settings(led_gpio, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
-			.do_request();
+    // gpiod::line_request gpio_request = gpio_chip.prepare_request()
+			// .set_consumer("toggle-line-value")
+			// .add_line_settings(led_gpio, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
+			// .do_request();
     
+    gpiod::request_builder gpio_request = gpio_chip.prepare_request();
     
-    ::gpiod::line::value gpio_value = ::gpiod::line::value::ACTIVE;
+    gpio_request.set_consumer("toggle-line-value");
+    gpio_request.add_line_settings(led_gpio, gpiod::line_settings().set_direction(gpiod::line::direction::OUTPUT));
+    
+    gpiod::line_request gpio_line = gpio_request.do_request();
+            
     
     for(idx=0; idx<200; ++idx) 
     {
         
         std::cout << "gpio value: " << gpio_value << std::endl;
         
-        gpio_request.set_value(led_gpio, gpio_value);   
+        gpio_line.set_value(led_gpio, gpio_value);   
                     
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         
-        gpio_value = (gpio_value == ::gpiod::line::value::ACTIVE) ? ::gpiod::line::value::INACTIVE : ::gpiod::line::value::ACTIVE;
+        gpio_value = (gpio_value == gpiod::line::value::ACTIVE) ? gpiod::line::value::INACTIVE : gpiod::line::value::ACTIVE;
     
     }
     
     // close the gpio line
+    gpio_line.release();
     gpio_chip.close();
     
     std::cout << "complete!" << std::endl;
