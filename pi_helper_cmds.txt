@@ -1,0 +1,48 @@
+###############################################################################
+
+# disable wifi and bluetooth
+# 1. edit config.txt
+sudo nano /boot/firmware/config.txt
+
+# 2. add dtoverlay=disable-wifi within the [all] section
+dtoverlay=disable-wifi
+dtoverlay=disable-bt
+
+###############################################################################
+
+# non-standard upgrade
+# sudo rpi-update rpi-6.1.y
+
+# needs verification
+#           TYPE    TX          PIN     RX          PIN     PORT
+# UART 0    PL011   GPIO 14     08      GPIO 15     10      /dev/ttyAMA0    
+# UART 1    MINI    GPIO 00     27      GPIO 01     28      /dev/ttyAMA1    
+# UART 2    PL011   GPIO 04     07      GPIO 05     29      /dev/ttyAMA2    
+# UART 3    PL011   GPIO 08     24      GPIO 09     21      /dev/ttyAMA3    
+# UART 4    PL011   GPIO 12     32      GPIO 13     33      /dev/ttyAMA4
+
+# enable GPIOheader UART on PI5
+# edit cmdline.txt - change to console=tty1??????? remove: console=serial0,115200 ttyAMA0
+sudo nano /boot/firmware/cmdline.txt
+
+# 1. edit config.txt
+sudo nano /boot/firmware/config.txt
+
+# 2. add an overlay like dtoverlay=uart1-pi5 for UART 1, or dtoverlay=uart0-pi5 for UART 0
+#  UART 0 - GPIO pins: 14/15
+dtoverlay=disable-bt
+enable_uart=1
+dtoverlay=uart0-pi5
+dtoverlay=uart0 # ????
+dtparam=uart0_console # ????
+dtparam=uart0 # ????
+
+# GPIO command line functions
+
+# check GPIO functions
+pinctrl get 14-17
+pinctrl funcs 14-17
+
+# disable bluetooth service - may not be needed
+sudo systemctl disable hciuart
+
