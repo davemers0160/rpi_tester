@@ -231,7 +231,7 @@ int main(int argc, char** argv)
     // list the files found
     for(idx=0; idx< iq_file_list.size(); ++idx)
     {
-        std::cout << info << iq_file_list[idx] << std::endl;   
+        std::cout << info << "IQ File[" << idx << "] - " <<iq_file_list[idx] << std::endl;   
     }
     
 
