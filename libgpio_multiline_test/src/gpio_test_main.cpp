@@ -219,7 +219,7 @@ int main(int argc, char** argv)
     std::vector<std::complex<int16_t>> samples(1024*8, 0);
 
     
-    std::string iq_file_path = "~/Projects/data/RF/";
+    std::string iq_file_path = "../../../data/RF/";
     iq_file_list = directory_listing(iq_file_path, ".sc16");
     if (iq_file_list.empty() == false)
     {
