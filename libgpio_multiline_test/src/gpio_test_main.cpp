@@ -125,7 +125,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
     uint32_t idx;
     
     gpiod::line::values switch_values;
-    uint16_t tmp_switch_value = 0;
+    int16_t tmp_switch_value = -1;
     bool current_transmit_status = false;
 
     std::cout << info << "Switch thread started." << std::endl;
@@ -133,7 +133,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
     // main thread loop
     while (switch_thread_running == true)
     {
-        tmp_switch_value = 0;
+        tmp_switch_value = -1;
         switch_values = request.get_values();
 
         // cycle through the switch pins 
@@ -143,7 +143,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
             // first match to gpio_on is the one
             if (switch_values[idx] == gpio_on)
             {
-                tmp_switch_value = idx+1;
+                tmp_switch_value = idx;
                 break;
             }
         }
@@ -154,7 +154,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
             current_switch_setting = tmp_switch_value;
             std::cout << info << "Switch value: " << current_switch_setting << std::endl;
 
-            if (current_switch_setting == 0)
+            if (current_switch_setting == -1)
             {
                 transmit = false;
             }
@@ -181,7 +181,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
         }
 
         // sleep and then beging polling again
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 
     }
 
