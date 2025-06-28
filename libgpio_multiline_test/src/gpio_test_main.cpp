@@ -123,6 +123,7 @@ void sig_handler(int sig_num)
 inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::complex<int16_t>>& samples, std::vector<std::string> &iq_file_list)
 {
     uint32_t idx;
+    
     gpiod::line::values switch_values;
     uint16_t tmp_switch_value = 0;
     bool current_transmit_status = false;
@@ -138,6 +139,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
         // cycle through the switch pins 
         for (idx = 0; idx < switch_values.size(); ++idx)
         {
+            std::cout << info << "switch_values[" << idx << "]: " << switch_values[idx] << std::endl;
             // first match to gpio_on is the one
             if (switch_values[idx] == gpio_on)
             {
@@ -179,7 +181,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
         }
 
         // sleep and then beging polling again
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     }
 
