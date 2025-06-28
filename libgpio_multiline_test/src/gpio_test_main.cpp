@@ -18,7 +18,9 @@
 #include <mutex>
 #include <filesystem>
 
+#include "iq_utils.h"
 #include "data_logger.h"
+#include "file_ops.h"
 
 #if defined(WITH_RPI)
 // RPI gpio include - libgpiod c++ bindings
@@ -115,10 +117,9 @@ void sig_handler(int sig_num)
 
 }   // end of sig_handler
 
-#if defined(WITH_RPI)
-
 //-----------------------------------------------------------------------------
-inline void poll_switch_thread(gpiod::request_builder &request, std::vector<std::complex<int16_t>>& samples, std::vector<std::string> &iq_file_list)
+#if defined(WITH_RPI)
+inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::complex<int16_t>>& samples, std::vector<std::string> &iq_file_list)
 {
     uint32_t idx;
     gpiod::line::values switch_values;
@@ -177,7 +178,7 @@ inline void poll_switch_thread(gpiod::request_builder &request, std::vector<std:
         }
 
         // sleep and then beging polling again
-        std::this_thread::sleep_for(std::chrono::milliseconds(400));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     }
 
@@ -248,6 +249,8 @@ int main(int argc, char** argv)
         std::thread switch_thread;
 
 #if defined(WITH_RPI)
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
         switch_thread = std::thread(poll_switch_thread, std::ref(switch_lines), std::ref(samples), std::ref(iq_file_list));
 #endif
 
