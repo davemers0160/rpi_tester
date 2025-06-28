@@ -167,10 +167,10 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
                 // load the new IQ file
-                std::cout << info << "IQ filename: " << iq_file_list[idx-1] << std::endl;
-                //data_log << info << "IQ filename: " << iq_file_list[idx-1] << std::endl;
+                std::cout << info << "IQ filename: " << iq_file_list[idx] << std::endl;
+                //data_log << info << "IQ filename: " << iq_file_list[idx] << std::endl;
 
-                //samples = read_iq_data<int16_t>(iq_file_path + iq_file_list[idx - 1]);
+                //samples = read_iq_data<int16_t>(iq_file_path + iq_file_list[idx]);
                 //num_tx_samples = samples.size();
 
                 //std::cout << info << "num_tx_samples: " << num_tx_samples << std::endl;
