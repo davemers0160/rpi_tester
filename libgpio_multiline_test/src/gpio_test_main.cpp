@@ -266,12 +266,11 @@ int main(int argc, char** argv)
         
         is_running = true;
 
-
         std::thread switch_thread;
 
 #if defined(WITH_RPI)
+        switch_thread_running = true;
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
         switch_thread = std::thread(poll_switch_thread, std::ref(switch_lines), std::ref(samples), std::ref(iq_file_list));
 #endif
 
