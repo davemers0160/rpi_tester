@@ -255,7 +255,6 @@ int main(int argc, char** argv)
     gpiod::request_builder gpio_switch_request = gpio_chip.prepare_request();
     gpio_switch_request.set_consumer("switch_monitor");
     gpio_switch_request.add_line_settings(switch_lines, gpiod::line_settings().set_direction(gpiod::line::direction::INPUT).set_bias(gpiod::line::bias::PULL_DOWN));
-    //gpio_switch_request.add_line_settings(switch_lines, gpiod::line_settings().set_bias(gpiod::line::bias::PULL_DOWN));
             
     // allocate the switch lines
     gpiod::line_request switch_lines = gpio_switch_request.do_request();
