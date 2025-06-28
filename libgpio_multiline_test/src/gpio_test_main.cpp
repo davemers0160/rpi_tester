@@ -193,7 +193,13 @@ int main(int argc, char** argv)
     uint32_t idx;
     int32_t gpio_result = 0;
     
-    std::string iq_file_path = "~/Projects/data/RF/"
+    std::string iq_filename;
+    std::vector<std::string> iq_file_list;
+    
+    std::vector<std::complex<int16_t>> samples(1024*8, 0);
+
+    
+    std::string iq_file_path = "~/Projects/data/RF/";
     iq_file_list = directory_listing(iq_file_path, ".sc16");
     if (iq_file_list.empty() == false)
     {
@@ -203,9 +209,7 @@ int main(int argc, char** argv)
     // list the files found
     for(idx=0; idx< iq_file_list.size(); ++idx)
     {
-        std::cout << info << iq_file_list[idx] << std::endl;
-        //std::cout << warning << iq_file_list[idx] << std::endl;
-        //std::cout << error(__FILE__, __LINE__) << "test" << std::endl;       
+        std::cout << info << iq_file_list[idx] << std::endl;   
     }
     
 
