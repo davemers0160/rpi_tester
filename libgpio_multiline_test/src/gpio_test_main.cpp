@@ -2,14 +2,21 @@
 #define WITH_RPI 1
 
 // C++ includes
-#include <cmath>
 #include <cstdint>
-#include <vector>
-#include <string>
+#include <cmath>
+#include <cstring>
+#include <csignal>
+
 #include <iostream>
-#include <filesystem>
-#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <complex>
+#include <chrono>
 #include <thread>
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
+#include <filesystem>
 
 #include "data_logger.h"
 
