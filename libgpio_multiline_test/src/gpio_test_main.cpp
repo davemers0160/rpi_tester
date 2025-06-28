@@ -11,6 +11,7 @@
 #include <sstream>
 #include <algorithm>
 #include <complex>
+#include <vector>
 #include <chrono>
 #include <thread>
 #include <atomic>
@@ -187,6 +188,24 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
 }   // end of poll_switch_thread
 
 #endif
+
+//-----------------------------------------------------------------------------
+std::vector<std::string> directory_listing(const std::string &path, const std::string &extension = ".*")
+{
+    std::vector<std::string> files;
+    for (const auto& entry : std::filesystem::directory_iterator(path)) 
+    {
+        if (std::filesystem::is_regular_file(entry) && entry.path().extension() == extension) 
+        {
+            files.push_back(entry.path().filename().string());
+        }
+    }
+    
+    // sort them alphabetically
+    std::sort(files.begin(), files.end(), std::less<std::string>());
+
+    return files;
+}   // end of directory_listing
 
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv)
