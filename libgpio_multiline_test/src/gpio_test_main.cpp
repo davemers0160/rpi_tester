@@ -87,12 +87,12 @@ Ground  -     | 39  40 |    21      sclk
 
 
 //--------------------------- GLOBAL VARIABLES --------------------------------
-atomic<bool> is_running = false;
+std::atomic<bool> is_running = false;
 
-atomic<bool> transmit = false;
+std::atomic<bool> transmit = false;
 
-atomic<bool> switch_thread_running = false;
-atomic<uint16_t> current_switch_setting = 0;
+std::atomic<bool> switch_thread_running = false;
+std::atomic<uint16_t> current_switch_setting = 0;
 
 uint32_t blade_timeout_ms = 10000;
 
@@ -163,7 +163,7 @@ inline void poll_switch_thread(gpiod::request_builder &request, std::vector<std:
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
                 // load the new IQ file
-                //std::cout << info << "IQ filename: " << iq_file_list[idx-1] << std::endl;
+                std::cout << info << "IQ filename: " << iq_file_list[idx-1] << std::endl;
                 //data_log << info << "IQ filename: " << iq_file_list[idx-1] << std::endl;
 
                 //samples = read_iq_data<int16_t>(iq_file_path + iq_file_list[idx - 1]);
@@ -192,6 +192,21 @@ int main(int argc, char** argv)
 {
     uint32_t idx;
     int32_t gpio_result = 0;
+    
+    std::string iq_file_path = "~/Projects/data/RF/"
+    iq_file_list = directory_listing(iq_file_path, ".sc16");
+    if (iq_file_list.empty() == false)
+    {
+        iq_filename = iq_file_path + iq_file_list[0];
+    }
+
+    // list the files found
+    for(idx=0; idx< iq_file_list.size(); ++idx)
+    {
+        std::cout << info << iq_file_list[idx] << std::endl;
+        //std::cout << warning << iq_file_list[idx] << std::endl;
+        //std::cout << error(__FILE__, __LINE__) << "test" << std::endl;       
+    }
     
 
 #if defined(WITH_RPI)
