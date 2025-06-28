@@ -1,4 +1,6 @@
 
+#define WITH_RPI 1
+
 // C++ includes
 #include <cmath>
 #include <cstdint>
@@ -9,8 +11,12 @@
 #include <iostream>
 #include <thread>
 
+#include "data_logger.h"
+
+#if defined(WITH_RPI)
 // RPI gpio include - libgpiod c++ bindings
 #include <gpiod.hpp>
+#endif
 
 // Use following commands to install prerequisites and build
 //
@@ -71,7 +77,7 @@ Ground  -     | 39  40 |    21      sclk
 
 /* Example configuration - customize to suit your situation */
 
-#define WITH_RPI 1
+
 
 //--------------------------- GLOBAL VARIABLES --------------------------------
 atomic<bool> is_running = false;
