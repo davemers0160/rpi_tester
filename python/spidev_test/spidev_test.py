@@ -45,15 +45,14 @@ spi.max_speed_hz = 10000000
 # Mode 3: CPOL=1, CPHA=1
 spi.mode = 0b00
 
-for idx in range(10):
+for idx in range(100):
 
     # Transfer data and receive response
     spi.xfer2(sequence_bytearray)
 
-    time.sleep(0.001)
+    time.sleep(0.005)
     print(f"Iteration: {idx}")
 
 # Close the SPI connection
 spi.close()
 print("SPI connection closed.")
-
