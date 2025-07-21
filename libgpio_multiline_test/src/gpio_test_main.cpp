@@ -95,15 +95,16 @@ std::atomic<bool> is_running = false;
 std::atomic<bool> transmit = false;
 
 std::atomic<bool> switch_thread_running = false;
-std::atomic<uint16_t> current_switch_setting = 0;
+std::atomic<int16_t> current_switch_setting = -1;
 
 uint32_t blade_timeout_ms = 10000;
 
 const gpiod::line::value gpio_on = gpiod::line::value::ACTIVE;
 const gpiod::line::value gpio_off = gpiod::line::value::INACTIVE;
-const gpiod::line::offset rf_ctrl_pin = 20;
+const gpiod::line::offset rf_ctrl_line = 24;
 
-const gpiod::line::offsets switch_lines = { 27, 17, 4, 3, 2 };
+const gpiod::line::offset pwr_indicator_line = 23;
+const gpiod::line::offsets switch_lines = { 18, 22, 27, 17, 4 };
 
 //-----------------------------------------------------------------------------
 void sig_handler(int sig_num)
@@ -139,7 +140,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
         // cycle through the switch pins 
         for (idx = 0; idx < switch_values.size(); ++idx)
         {
-            std::cout << info << "switch_values[" << idx << "]: " << switch_values[idx] << std::endl;
+            //std::cout << info << "switch_values[" << idx << "]: " << switch_values[idx] << std::endl;
             // first match to gpio_on is the one
             if (switch_values[idx] == gpio_on)
             {
@@ -181,7 +182,7 @@ inline void poll_switch_thread(gpiod::line_request &request, std::vector<std::co
         }
 
         // sleep and then beging polling again
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     }
 
@@ -243,35 +244,51 @@ int main(int argc, char** argv)
 
     // initialize the chip & gpio line
     gpiod::chip gpio_chip = gpiod::chip(chip_path);
+    
+    // setup the gpio for rf control and allocate the gpio for use
     gpiod::request_builder gpio_request = gpio_chip.prepare_request();
-
     gpio_request.set_consumer("rf_control");
-    gpio_request.add_line_settings(rf_ctrl_pin, gpiod::line_settings().set_direction(gpiod::line::direction::OUTPUT));
+    gpio_request.add_line_settings(rf_ctrl_line, gpiod::line_settings().set_direction(gpiod::line::direction::OUTPUT)); 
+    gpiod::line_request rf_ctrl_request = gpio_request.do_request();
+    
+    // setup the gpio line for the power indicator and allocate the switch lines
+    gpiod::request_builder gpio_pwr_request = gpio_chip.prepare_request();
+    gpio_pwr_request.set_consumer("pwr_indicator");
+    gpio_pwr_request.add_line_settings(pwr_indicator_line, gpiod::line_settings().set_direction(gpiod::line::direction::OUTPUT).set_bias(gpiod::line::bias::PULL_DOWN));
+    gpiod::line_request pwr_line_request = gpio_pwr_request.do_request();
 
-	// allocate the gpio for use
-    gpiod::line_request rf_gpio_line = gpio_request.do_request();
-
-    // setup the gpio lines that montior the switch
+    // setup the gpio lines that montior the switch and allocate the switch lines
     gpiod::request_builder gpio_switch_request = gpio_chip.prepare_request();
     gpio_switch_request.set_consumer("switch_monitor");
     gpio_switch_request.add_line_settings(switch_lines, gpiod::line_settings().set_direction(gpiod::line::direction::INPUT).set_bias(gpiod::line::bias::PULL_DOWN));
-            
-    // allocate the switch lines
-    gpiod::line_request switch_lines = gpio_switch_request.do_request();
+    gpiod::line_request switch_line_request = gpio_switch_request.do_request();
     
 #endif
 
     try
     {
+        // handle SIGINT signals
+        if (signal(SIGINT, sig_handler) == SIG_ERR) 
+        {
+            std::cerr << warning << "Unable to catch SIGINT signals" << std::endl;
+        }
+        // handle SIGTERM signals
+        if (signal(SIGTERM, sig_handler) == SIG_ERR)
+        {
+            std::cerr << warning << "Unable to catch SIGTERM signals" << std::endl;
+        }
         
         is_running = true;
 
         std::thread switch_thread;
 
 #if defined(WITH_RPI)
+        pwr_line_request.set_value(pwr_indicator_line, gpio_on);
+        
         switch_thread_running = true;
+
+        switch_thread = std::thread(poll_switch_thread, std::ref(switch_line_request), std::ref(samples), std::ref(iq_file_list));
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        switch_thread = std::thread(poll_switch_thread, std::ref(switch_lines), std::ref(samples), std::ref(iq_file_list));
 #endif
 
         std::cout << std::endl << info << "GPIO Test Running..." << std::endl << std::endl;
@@ -297,9 +314,11 @@ int main(int argc, char** argv)
 //#endif
 
         // close the gpio line
-        rf_gpio_line.set_value(rf_ctrl_pin, gpio_off);
-        rf_gpio_line.release();
-        switch_lines.release();
+        rf_ctrl_request.set_value(rf_ctrl_line, gpio_off);
+        rf_ctrl_request.release();
+        switch_line_request.release();
+        pwr_line_request.set_value(pwr_indicator_line, gpio_off);
+        pwr_line_request.release();
         gpio_chip.close();
 
         std::cout << info << "Closing GPIO..." << std::endl;
@@ -314,9 +333,11 @@ int main(int argc, char** argv)
         //data_log << error(__FILE__, __LINE__) << "Error: " << e.what() << std::endl;
 #if defined(WITH_RPI)
         // close the gpio line
-        rf_gpio_line.set_value(rf_ctrl_pin, gpio_off);
-        rf_gpio_line.release();
-        switch_lines.release();
+        rf_ctrl_request.set_value(rf_ctrl_line, gpio_off);
+        rf_ctrl_request.release();
+        switch_line_request.release();
+        pwr_line_request.set_value(pwr_indicator_line, gpio_off);
+        pwr_line_request.release();
         gpio_chip.close();
 
         std::cout << info << "Closing GPIO..." << std::endl;
