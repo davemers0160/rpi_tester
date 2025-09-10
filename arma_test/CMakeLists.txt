@@ -52,7 +52,7 @@ if(WIN32)
     find_package(OpenBLAS CONFIG REQUIRED)
     find_package(lapack CONFIG REQUIRED)
 else()
-    set(ARMADILLO_INCLUDE_DIRS "../../armadillo-14.6.2/include")
+    #set(ARMADILLO_INCLUDE_DIRS "../../armadillo-14.6.2/include")
     find_package(BLAS REQUIRED)
     if (BLAS_FOUND)
         message(STATUS "Found BLAS (OpenBLAS): ${BLAS_LIBRARIES}")
@@ -60,7 +60,10 @@ else()
 
     else()
         message(FATAL_ERROR "BLAS not found. Please install OpenBLAS or ensure it's in a searchable path.")
-    endif()    
+    endif()
+
+    find_package(ARMADILLO)
+    
 endif()
 
 # look for any *.c and *.cpp files
