@@ -45,7 +45,7 @@ include("${PR_ROOT}/common/platform_paths.cmake")
 
 if(WIN32)
         
-    set(ARMADILLO_INCLUDE_DIRS "D:/Projects/armadillo-14.6.2/include")
+    set(ARMADILLO_INCLUDE_DIR "D:/Projects/armadillo-14.6.2/include")
     set(BLAS_LIBRARIES "D:/Projects/vcpkg/installed/x64-windows/debug/lib/openblas.lib")
     set(BLAS_INCLUDE_DIR "D:/Projects/vcpkg/installed/x64-windows/include/openblas")
     
@@ -77,6 +77,7 @@ set(project_includes
     "include" 
     "${PR_ROOT}/common/include"
     "${COMMON_ROOT}/include"
+    ${ARMADILLO_INCLUDE_DIR}
     )
 
 message(" ")
@@ -87,7 +88,7 @@ message(STATUS "List of CACHE variables: ${cache_vars}")
 
 #if(ARMADILLO_FOUND)
     set(project_includes ${project_includes} ${ARMADILLO_INCLUDE_DIRS} ${BLAS_INCLUDE_DIRS})
-    set(project_libs ${project_libs} ${BLAS_LIBRARIES} lapack ) #OpenBLAS::OpenBLAS)
+    set(project_libs ${project_libs} ${BLAS_LIBRARIES} lapack ${ARMADILLO_LIBRARY}) #OpenBLAS::OpenBLAS)
 #endif()
 
 message(" ")
