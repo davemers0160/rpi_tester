@@ -62,7 +62,7 @@ else()
         message(FATAL_ERROR "BLAS not found. Please install OpenBLAS or ensure it's in a searchable path.")
     endif()
 
-    find_package(ARMADILLO)
+    find_package(Armadillo REQUIRED)
     
 endif()
 
