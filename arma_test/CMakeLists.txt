@@ -88,7 +88,7 @@ message(STATUS "List of CACHE variables: ${cache_vars}")
 
 #if(ARMADILLO_FOUND)
     set(project_includes ${project_includes} ${ARMADILLO_INCLUDE_DIRS} ${BLAS_INCLUDE_DIRS})
-    set(project_libs ${project_libs} ${BLAS_LIBRARIES} lapack ${ARMADILLO_LIBRARY}) #OpenBLAS::OpenBLAS)
+    set(project_libs ${project_libs} ${BLAS_LIBRARIES} ${ARMADILLO_LIBRARY}) #OpenBLAS::OpenBLAS)
 #endif()
 
 message(" ")
