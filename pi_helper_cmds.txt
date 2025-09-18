@@ -22,20 +22,19 @@ dtoverlay=disable-bt
 # UART 4    PL011   GPIO 12     32      GPIO 13     33      /dev/ttyAMA4
 
 # enable GPIOheader UART on PI5
-# edit cmdline.txt - change to console=tty1??????? remove: console=serial0,115200 ttyAMA10
+# edit cmdline.txt - change to console=tty??????? remove: console=serial0,115200 ttyAMA10
 sudo nano /boot/firmware/cmdline.txt
 
 # 1. edit config.txt
 sudo nano /boot/firmware/config.txt
 
-# 2. add an overlay like dtoverlay=uart1-pi5 for UART 1, or dtoverlay=uart0-pi5 for UART 0
+# 2. add an overlay like dtoverlay=uart1-pi5 for UART 1, or dtoverlay=uart0-pi5 for UART 0 <- disable bt
 #  UART 0 - GPIO pins: 14/15
-dtoverlay=disable-bt
-enable_uart=1
-dtoverlay=uart0-pi5=on
-dtoverlay=uart0=on # ????
-dtparam=uart0_console # ????
-dtparam=uart0 # ????
+#enable_uart=1
+dtoverlay=uart0-pi5 # <- pi 5 version
+dtoverlay=uart0=on # <- pi 4/3 version
+#dtparam=uart0_console # ????
+#dtparam=uart0 # ????
 
 # GPIO command line functions
 
